@@ -22,6 +22,26 @@ public partial class ListPage : ContentPage
         await Navigation.PopAsync();
     }
 
+    async void OnDeleteItemButtonClicked(object sender, EventArgs e)
+    {
+        var selectedProduct = (Product)listView.SelectedItem;
+        if (selectedProduct != null)
+        {
+            bool confirm = await DisplayAlert("Confirm",
+                                               $"Are you sure you want to delete {selectedProduct.Description}?",
+                                               "Yes", "No");
+            if (confirm)
+            {
+                await App.Database.DeleteProductAsync(selectedProduct);
+                listView.ItemsSource = await App.Database.GetListProductsAsync(((ShopList)BindingContext).ID);
+            }
+        }
+        else
+        {
+            await DisplayAlert("Error", "Please select an item to delete.", "OK");
+        }
+    }
+
     async void OnChooseButtonClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new ProductPage((ShopList)
@@ -31,6 +51,8 @@ public partial class ListPage : ContentPage
         });
 
     }
+
+
 
     protected override async void OnAppearing()
     {
