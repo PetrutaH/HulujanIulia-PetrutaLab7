@@ -22,6 +22,13 @@ namespace HulujanIulia_PetrutaLab7.Data
 
         }
 
+        //tema
+        public Task<int> DeleteShopAsync(Shop shop)
+        {
+            return _database.DeleteAsync(shop);
+        }
+
+
         public Task<List<Shop>> GetShopsAsync()
         {
             return _database.Table<Shop>().ToListAsync();
